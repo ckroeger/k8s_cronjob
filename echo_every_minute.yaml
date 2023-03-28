@@ -1,0 +1,27 @@
+apiVersion: batch/v1
+# https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/
+kind: CronJob
+metadata:
+  name: echo-job
+  labels:
+    job: echo
+spec:
+  # https://crontab.guru/ for cron-calculation
+  schedule: "*/1 * * * *" # every minute
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: echo-pod
+              image: busybox
+              imagePullPolicy: IfNotPresent
+              command:
+                - /bin/sh
+                - -c
+                - >
+                  echo " -----------"
+                  d=$(date)
+                  echo "echo at $d"
+                  echo " -----------"
+          restartPolicy: OnFailure
